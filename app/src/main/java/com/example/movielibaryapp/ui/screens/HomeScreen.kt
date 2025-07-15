@@ -18,10 +18,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -34,32 +38,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.movielibaryapp.data.model.Movie
 import com.example.movielibaryapp.data.model.MovieItem
 import com.example.movielibaryapp.data.model.getDummyMovie
 import com.example.movielibaryapp.ui.componets.MovieCircleImage
 import com.example.movielibaryapp.ui.componets.MovieCommingSoonImage
+import com.example.movielibaryapp.ui.navigation.MovieScreens
+import com.example.movielibaryapp.ui.theme.Pink42
 import com.example.movielibaryapp.ui.theme.Pink43
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    Scaffold (
+    Scaffold(
         topBar = {
-            TopAppBar(title = {Text(text = "Movies") },
+            TopAppBar(
+                title = { Text(text = "Movies") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Pink43,
                     titleContentColor = Color.Black
                 )
             )
         }
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,9 +85,9 @@ fun MovieContent(
     movieList: ArrayList<MovieItem> = getDummyMovie()
 ) {
     LazyColumn {
-        items(movieList){movieItem ->
+        items(movieList) { movieItem ->
             MovieRow(movieItem = movieItem) {
-
+                navController.navigate(route = MovieScreens.DetailScreen.name + "/$it")
             }
         }
     }
@@ -94,13 +100,14 @@ fun MovieRow(
     movieItem: MovieItem = getDummyMovie()[0],
     onItemClick: (String) -> Unit = {}
 ) {
-    Card(modifier = modifier
-        .padding(horizontal = 10.dp, vertical = 4.dp)
-        .fillMaxWidth()
-        .clickable {
-            onItemClick(movieItem.movieImdbID)
-        }
-        .height(130.dp),
+    Card(
+        modifier = modifier
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .fillMaxWidth()
+            .clickable {
+                onItemClick(movieItem.movieImdbID)
+            }
+            .height(130.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = Color.Black
@@ -110,10 +117,10 @@ fun MovieRow(
             defaultElevation = 6.dp
         )
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
-        ){
+        ) {
             MoviePosterImage(movieItem = movieItem)
 
             Column(
@@ -133,20 +140,27 @@ fun MovieRowExtraData(movieItem: MovieItem) {
 
     AnimatedVisibility(visible = expandableState) {
         Column {
-            Divider(modifier = Modifier.padding(vertical = 5.dp).border(0.4.dp,color = Color.Black))7
-            Text(text = "Plot: ${movieItem.moviePlot}",
+            Divider(
+                modifier = Modifier
+                    .padding(vertical = 5.dp)
+                    .border(0.4.dp, color = Color.Black)
+            )
+            Text(
+                text = "Plot: ${movieItem.moviePlot}",
                 style = MaterialTheme.typography.bodySmall
             )
 
             Spacer(modifier = Modifier.padding(vertical = 3.dp))
 
-            Text(text = "Genre: ${movieItem.movieActors}",
+            Text(
+                text = "Genre: ${movieItem.movieActors}",
                 style = MaterialTheme.typography.bodySmall
             )
 
             Spacer(modifier = Modifier.padding(vertical = 3.dp))
 
-            Text(text = "Actors: ${movieItem.movieImdbRating}",
+            Text(
+                text = "Actors: ${movieItem.movieImdbRating}",
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -154,8 +168,22 @@ fun MovieRowExtraData(movieItem: MovieItem) {
 
     Surface(
         modifier = Modifier
-    ) {
+            .clip(CircleShape)
+            .padding(top = 10.dp)
+            .border(1.dp, color = Pink43, CircleShape),
+        color = Pink42,
+        shape = CircleShape
 
+    ) {
+        Icon(
+            imageVector = if (expandableState) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+            contentDescription = "arrow",
+            modifier = Modifier
+                .size(25.dp)
+                .clickable {
+                    expandableState = !expandableState
+                },
+        )
     }
 }
 
@@ -164,13 +192,13 @@ fun MoviePosterImage(
     modifier: Modifier = Modifier,
     movieItem: MovieItem
 ) {
-    Surface (
+    Surface(
         modifier = modifier
             .padding(10.dp)
             .size(100.dp),
         shape = CircleShape,
         shadowElevation = 10.dp
-    ){
+    ) {
         MovieCircleImage(imageUrl = movieItem.movieImages.first())
         if (movieItem.movieComingSoon) {
             MovieCommingSoonImage()
@@ -180,15 +208,18 @@ fun MoviePosterImage(
 
 @Composable
 fun MovieRowMainData(movieItem: MovieItem) {
-    Text(text = movieItem.movieTitle,
+    Text(
+        text = movieItem.movieTitle,
         style = MaterialTheme.typography.titleMedium
     )
 
-    Text(text = "Director: ${movieItem.movieDirector}",
+    Text(
+        text = "Director: ${movieItem.movieDirector}",
         style = MaterialTheme.typography.labelMedium
     )
 
-    Text(text = "Data: ${movieItem.movieYear}",
+    Text(
+        text = "Data: ${movieItem.movieYear}",
         style = MaterialTheme.typography.labelMedium
     )
 
