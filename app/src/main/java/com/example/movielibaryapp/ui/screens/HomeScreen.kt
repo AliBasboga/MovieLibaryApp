@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,8 +22,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -102,12 +101,11 @@ fun MovieRow(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .padding(horizontal = 10.dp, vertical = 5.dp)
             .fillMaxWidth()
             .clickable {
                 onItemClick(movieItem.movieImdbID)
-            }
-            .height(130.dp),
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = Color.Black
@@ -135,29 +133,30 @@ fun MovieRow(
 }
 
 @Composable
-fun MovieRowExtraData(movieItem: MovieItem) {
+fun MovieRowExtraData(movieItem: MovieItem, modifier: Modifier = Modifier) {
     var expandableState by remember { mutableStateOf(false) }
 
     AnimatedVisibility(visible = expandableState) {
         Column {
-            Divider(
-                modifier = Modifier
-                    .padding(vertical = 5.dp)
-                    .border(0.4.dp, color = Color.Black)
+            HorizontalDivider(
+                modifier = modifier
+                    .padding(vertical = 5.dp),
+                thickness = 0.5.dp,
+                color = Color.Black
             )
             Text(
                 text = "Plot: ${movieItem.moviePlot}",
                 style = MaterialTheme.typography.bodySmall
             )
 
-            Spacer(modifier = Modifier.padding(vertical = 3.dp))
+            Spacer(modifier = modifier.padding(vertical = 3.dp))
 
             Text(
                 text = "Genre: ${movieItem.movieActors}",
                 style = MaterialTheme.typography.bodySmall
             )
 
-            Spacer(modifier = Modifier.padding(vertical = 3.dp))
+            Spacer(modifier = modifier.padding(vertical = 3.dp))
 
             Text(
                 text = "Actors: ${movieItem.movieImdbRating}",
@@ -167,10 +166,10 @@ fun MovieRowExtraData(movieItem: MovieItem) {
     }
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .clip(CircleShape)
             .padding(top = 10.dp)
-            .border(1.dp, color = Pink43, CircleShape),
+            .border(1.dp, Pink43, CircleShape),
         color = Pink42,
         shape = CircleShape
 
@@ -178,7 +177,7 @@ fun MovieRowExtraData(movieItem: MovieItem) {
         Icon(
             imageVector = if (expandableState) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
             contentDescription = "arrow",
-            modifier = Modifier
+            modifier = modifier
                 .size(25.dp)
                 .clickable {
                     expandableState = !expandableState

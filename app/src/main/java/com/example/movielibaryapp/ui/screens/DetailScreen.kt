@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import com.example.movielibaryapp.data.model.MovieItem
 import com.example.movielibaryapp.data.model.getDummyMovie
 import com.example.movielibaryapp.ui.componets.MovieRectangleImage
+import com.example.movielibaryapp.ui.theme.Pink42
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +54,7 @@ fun DetailScreen(
             TopAppBar(
                 title = { Text(text = detailedMovie.movieTitle) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor = Pink42,
                     titleContentColor = Color.Black
                 ),
                 navigationIcon = {
@@ -72,7 +73,7 @@ fun DetailScreen(
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Green)
+                .background(color = Pink42)
                 .padding(it),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
