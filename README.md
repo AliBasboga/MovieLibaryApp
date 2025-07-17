@@ -1,6 +1,6 @@
 # 🎬 MovieLibaryApp
 
-![Logo](https://avatars.githubusercontent.com/u/176952001?v=4)
+![Logo](app/src/main/ic_launcher-playstore.png)
 
 ## 🚀 Stylish, Eye-Catching & Modern Movie Library
 
